@@ -6,34 +6,23 @@ Population::Population()
 {
 }
 
-Population::Population(int p_size, int g, int num)
-{
-	pop_size = p_size;
-	number_of_generation = g;
-	people = new Person[pop_size];
-	actual_size = 0;
-	n = num;
-}
-
 Population::Population(int p_size, int num)
 {
 	pop_size = p_size;
-	number_of_generation = 1;
-	people = new Person[pop_size];
 	n = num;
-	for (int i = 0; i < pop_size; i++)
-	{
-		Person p(n);
-		people[i] = p;
-	}
-	actual_size = pop_size;
-
+	actual_size = 0;
+	people.reserve(pop_size);
 }
 
 Population::~Population()
 {
 	//delete people;
 }
+
+//Population & Population::operator=(Population & pcOther)
+//{
+//	// TODO: tu wstawiæ instrukcjê return
+//}
 
 int Population::computeGrade(int** flows, int** distance)
 {
@@ -49,27 +38,26 @@ int Population::computeGrade(int** flows, int** distance)
 	return min;
 }
 
-Person & Population::tournament(int tour)
+Person  Population::tournament(int tour)
 {
-	Person* zaw = new Person[tour];
-	Person* res = randomPerson();
-	int the_best = res->getGrade();
+	vector<Person> zaw(tour);
+	zaw[0] = *randomPerson();
+	int the_best = 0;
 	for (int i = 1; i < tour; i++)
 	{
 		zaw[i] = *randomPerson();
-		if (zaw[i].getGrade() < the_best)
+		if (zaw[i].getGrade() < zaw[the_best].getGrade())
 		{
-			*res = zaw[i];
-			the_best = zaw[i].getGrade();
+			the_best = i;
 		}
 	}
-	return *res;
+	Person p = zaw[the_best];
+	return p;
 }
 
-Person & Population::crossover(Person & pcOther)
+Person & Population::crossover(Person & pcOther1, Person & pcOther2)
 {
-	Person* parent = randomPerson();
-	return pcOther.crossover(*parent);
+	return pcOther1.crossover(pcOther2);
 }
 
 Person & Population::mutation(Person & pcOther)
@@ -80,14 +68,27 @@ Person & Population::mutation(Person & pcOther)
 
 Person* Population::randomPerson()
 {
-	srand(time(NULL));
 	return &(people[rand() % pop_size]);
 }
 
 void Population::addPerson(Person & per)
 {
-	people[actual_size] = per;
+	people.push_back(per);
 	actual_size++;
+}
+
+void Population::addRandomPerson()
+{
+	people.push_back(Person(n));
+	actual_size++;
+}
+
+void Population::randomPopulation()
+{
+	for (int i = 0; i < pop_size; i++)
+	{
+		addRandomPerson();
+	}
 }
 
 int Population::getActualSize()
@@ -98,4 +99,25 @@ int Population::getActualSize()
 void Population::setActualSize(int i)
 {
 	actual_size = i;
+}
+
+string Population::getPerson(int i)
+{
+	return people[i].toString();
+}
+
+string Population::toString()
+{
+	string res = "";
+	for (int i = 0; i < actual_size; i++)
+	{
+		res += getPerson(i) + "\n";
+	}
+	return res;
+}
+
+void Population::clear()
+{
+	actual_size = 0;
+	people.clear();
 }

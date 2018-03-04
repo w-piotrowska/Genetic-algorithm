@@ -9,8 +9,8 @@ public:
 	int run();
 	Population createRandomPopulation();
 	int computeGrade(Population pop);
-	Person & selection(Population pop);
-	Person & crossover(Population pop, Person per);
+	Person  selection(Population pop);
+	Person & crossover(Population pop, Person per1, Person per2);
 	Person & mutation(Population pop, Person per);
 
 private:

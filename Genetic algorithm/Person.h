@@ -11,7 +11,7 @@ public:
 	Person();
 	Person(int number);
 	Person(int number, int* g);
-	Person(Person &pcOther);
+	Person(const Person &pcOther);
 	~Person();
 	Person& operator=(Person &pcOther);
 	string toString();
@@ -26,5 +26,7 @@ private:
 	int n;
 	int *genes;
 	int grade;
+	int** flows;
+	int**distance;
 };
 

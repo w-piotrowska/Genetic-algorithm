@@ -15,26 +15,27 @@ Evolution::Evolution(double prm, double prx, int p_size, int generations, int t,
 	tour = t;
 	n = n_of_gens;
 	flows = new int*[n];
-	for (int i = 0; i < n; i++)
+	flows = fl;
+	/*for (int i = 0; i < n; i++)
 	{
 		flows[i] = new int[n];
 		for (int j = 0; j < n; j++)
 		{
 			flows[i][j] = fl[i][j];
 		}
-	}
+	}*/
 	distance = new int*[n];
-	for (int i = 0; i < n; i++)
-	{
-		distance[i] = new int[n];
-		for (int j = 0; j < n; j++)
-		{
-			distance[i][j] = dis[i][j];
-		}
-	}
-	populations = new Population[gen];
+	distance = dis;
+	//for (int i = 0; i < n; i++)
+	//{
+	//	distance[i] = new int[n];
+	//	for (int j = 0; j < n; j++)
+	//	{
+	//		distance[i][j] = dis[i][j];
+	//	}
+	//}
+	//populations = new Population[gen];
 }
-
 
 Evolution::~Evolution()
 {
@@ -54,32 +55,33 @@ Evolution::~Evolution()
 int Evolution::run()
 {
 	int result;
-	Population actual_pop = createRandomPopulation();
+	Population actual_pop(pop_size, n);
+	actual_pop.randomPopulation();
 	result = actual_pop.computeGrade(flows, distance);
-	Population pop(pop_size, 2, n);
+	Population pop(pop_size, n);
 	for (int i = 1; i < gen; i++)
 	{
-		Person p;
-		while (pop.getActualSize() <= pop_size)
+		for (int i = 0; i < gen / 2; i++)
 		{
-			p = selection(actual_pop);
-			srand(time(NULL));
-			double prawd = (double)rand() / (double)RAND_MAX;
+			Person p1 = selection(actual_pop);
+			Person p2 = selection(actual_pop);
+			/*double prawd = (double)rand() / (double)RAND_MAX;
 			if (prawd < px)
 			{
 				p = crossover(actual_pop, p);
 			}
-			srand(time(NULL));
 			prawd = (double)rand() / (double)RAND_MAX;
 			if (prawd > pm)
 			{
-				p = mutation(actual_pop, p);
-			}
-			pop.addPerson(p);
+				p = crossover(actual_pop, p);
+			}*/
+			Person p3 = crossover(actual_pop, p1, p2);
+			p3 = mutation(actual_pop, p3);
+			pop.addPerson(p3);
 		}
 		result = pop.computeGrade(flows, distance);
 		actual_pop = pop;
-		pop.setActualSize(0);
+		pop.clear();
 	}    
 	return result;
 
@@ -87,7 +89,7 @@ int Evolution::run()
 
 Population Evolution::createRandomPopulation()
 {
-	Population *p = new Population(pop_size, tour, n);
+	Population *p = new Population(pop_size, n);
 	return *p;
 }
 
@@ -96,14 +98,14 @@ int Evolution::computeGrade(Population pop)
 	return pop.computeGrade(flows, distance);
 }
 
-Person & Evolution::selection(Population pop)
+Person Evolution::selection(Population pop)
 {
 	return pop.tournament(tour);
 }
 
-Person & Evolution::crossover(Population pop, Person per)
+Person & Evolution::crossover(Population pop, Person per1, Person per2)
 {
-	return pop.crossover(per);
+	return pop.crossover(per1, per2);
 }
 
 Person & Evolution::mutation(Population pop, Person per)

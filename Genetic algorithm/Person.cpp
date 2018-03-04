@@ -17,11 +17,11 @@ Person::Person(int number)
 {
 	n = number;
 	genes = new int[n];
-	srand(time(NULL));
 	for (int i = 0; i < n; i++)
 	{
 		genes[i] = 1 + rand() % (n - 1);
 	}
+	fix();
 }
 
 Person::Person(int number, int* g)
@@ -34,7 +34,7 @@ Person::Person(int number, int* g)
 	}
 }
 
-Person::Person(Person & pcOther)
+Person::Person(const Person & pcOther)
 {
 	n = pcOther.n;
 	genes = new int[n];
@@ -42,11 +42,12 @@ Person::Person(Person & pcOther)
 	{
 		genes[i] = pcOther.genes[i];
 	}
+	grade = pcOther.grade;
 }
 
 Person::~Person()
 {
-	delete genes;
+	//delete genes;
 }
 
 Person & Person::operator=(Person & pcOther)
@@ -58,17 +59,18 @@ Person & Person::operator=(Person & pcOther)
 	{
 		genes[i] = pcOther.genes[i];
 	}
+	grade = pcOther.grade;
 	return *this;
 }
 
 string Person::toString()
 {
 	string result = "";
-	result += to_string(n) + "\n";
 	for (int i = 0; i < n; i++)
 	{
-		result += " " + to_string(genes[i]);
+		result += to_string(genes[i]) + " ";
 	}
+	result += to_string(grade);
 	return result;
 }
 
@@ -79,7 +81,7 @@ int Person::evaluating_result(int ** flows, int ** distance)
 	{
 		for (int j = 0; j < n; j++)
 		{
-			res += flows[genes[i]][genes[j]] * distance[i][j];
+			res += flows[genes[i]-1][genes[j]-1] * distance[i][j];
 		}
 	}
 	grade = res;
@@ -88,7 +90,6 @@ int Person::evaluating_result(int ** flows, int ** distance)
 
 void Person::swap()
 {
-	srand(time(NULL));
 	int ran1 = rand() % n;
 	int tmp = genes[ran1];
 	int ran2 = rand() % n;
@@ -128,19 +129,20 @@ void Person::fix()
 
 Person & Person::crossover(Person & pcOther)
 {
-	srand(time(NULL));
 	int cut = rand() % n;
+	std::cout << to_string(cut) << endl;
 	int* g = new int[n];
-	for (int i = 0; i < cut; i++)
+	for (int i = 0; i <= cut; i++)
 	{
 		g[i] = genes[i];
 	}
-	for (int i = cut; i < n; i++)
+	for (int i = cut+1; i < n; i++)
 	{
 		g[i] = pcOther.genes[i];
 	}
 	Person *child = new Person(n, g);
-	delete g;
+	child->fix();
+	//delete g;
 	return *child;
 }
 
