@@ -55,12 +55,12 @@ Person  Population::tournament(int tour)
 	return p;
 }
 
-Person & Population::crossover(Person & pcOther1, Person & pcOther2)
+Person Population::crossover(Person pcOther1, Person pcOther2)
 {
 	return pcOther1.crossover(pcOther2);
 }
 
-Person & Population::mutation(Person & pcOther)
+Person Population::mutation(Person pcOther)
 {
 	pcOther.swap();
 	return pcOther;

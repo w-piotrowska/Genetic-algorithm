@@ -130,7 +130,6 @@ void Person::fix()
 Person & Person::crossover(Person & pcOther)
 {
 	int cut = rand() % n;
-	std::cout << to_string(cut) << endl;
 	int* g = new int[n];
 	for (int i = 0; i <= cut; i++)
 	{

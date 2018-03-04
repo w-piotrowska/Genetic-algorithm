@@ -11,8 +11,8 @@ public:
 	//Population& operator=(Population &pcOther);
 	int computeGrade(int** flows, int** distance);
 	Person tournament(int tour);
-	Person & crossover(Person & pcOther1, Person & pcOther2);
-	Person & mutation(Person & pcOther);
+	Person crossover(Person pcOther1, Person pcOther2);
+	Person mutation(Person pcOther);
 	Person* randomPerson();
 	void addPerson(Person & per);
 	void addRandomPerson();

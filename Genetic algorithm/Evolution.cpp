@@ -61,7 +61,7 @@ int Evolution::run()
 	Population pop(pop_size, n);
 	for (int i = 1; i < gen; i++)
 	{
-		for (int i = 0; i < gen / 2; i++)
+		for (int j = 0; j < pop_size; j++)
 		{
 			Person p1 = selection(actual_pop);
 			Person p2 = selection(actual_pop);
@@ -76,8 +76,8 @@ int Evolution::run()
 				p = crossover(actual_pop, p);
 			}*/
 			Person p3 = crossover(actual_pop, p1, p2);
-			p3 = mutation(actual_pop, p3);
-			pop.addPerson(p3);
+			Person p = mutation(actual_pop, p3);
+			pop.addPerson(p);
 		}
 		result = pop.computeGrade(flows, distance);
 		actual_pop = pop;
@@ -103,12 +103,12 @@ Person Evolution::selection(Population pop)
 	return pop.tournament(tour);
 }
 
-Person & Evolution::crossover(Population pop, Person per1, Person per2)
+Person Evolution::crossover(Population pop, Person per1, Person per2)
 {
 	return pop.crossover(per1, per2);
 }
 
-Person & Evolution::mutation(Population pop, Person per)
+Person Evolution::mutation(Population pop, Person per)
 {
 	return pop.mutation(per);
 }
