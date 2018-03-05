@@ -47,7 +47,7 @@ Person::Person(const Person & pcOther)
 
 Person::~Person()
 {
-	//delete genes;
+	delete genes;
 }
 
 Person & Person::operator=(Person & pcOther)

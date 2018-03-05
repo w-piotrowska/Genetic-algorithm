@@ -54,35 +54,87 @@ Evolution::~Evolution()
 
 int Evolution::run()
 {
-	int result;
+	int result = 0;
 	Population actual_pop(pop_size, n);
 	actual_pop.randomPopulation();
-	result = actual_pop.computeGrade(flows, distance);
+	actual_pop.computeGrade(flows, distance);
+
+	ofstream plik;
+	plik.open("ga.txt");
+	plik << n << "\t";
+	plik << actual_pop.minGrade() << "\t";
+	plik << actual_pop.maxGrade() << "\t";
+	plik << actual_pop.averageGrade();
+	plik << endl;
+
 	Population pop(pop_size, n);
 	for (int i = 1; i < gen; i++)
 	{
-		for (int j = 0; j < pop_size; j++)
+		for (int j = 0; j < pop_size / 2; j++)
 		{
 			Person p1 = selection(actual_pop);
 			Person p2 = selection(actual_pop);
-			/*double prawd = (double)rand() / (double)RAND_MAX;
+			double prawd = (double)rand() / (double)RAND_MAX;
 			if (prawd < px)
 			{
-				p = crossover(actual_pop, p);
+				Person p3 = crossover(actual_pop, p1, p2);
+				Person p4 = crossover(actual_pop, p2, p1);
+				prawd = (double)rand() / (double)RAND_MAX;
+				if (prawd > pm)
+				{
+					Person p = mutation(actual_pop, p3);
+					pop.addPerson(p);
+				}
+				else
+				{
+					pop.addPerson(p3);
+				}
+				prawd = (double)rand() / (double)RAND_MAX;
+				if (prawd > pm)
+				{
+					Person p = mutation(actual_pop, p4);
+					pop.addPerson(p);
+				}
+				else
+				{
+					pop.addPerson(p4);
+				}
 			}
-			prawd = (double)rand() / (double)RAND_MAX;
-			if (prawd > pm)
+			else
 			{
-				p = crossover(actual_pop, p);
-			}*/
-			Person p3 = crossover(actual_pop, p1, p2);
-			Person p = mutation(actual_pop, p3);
-			pop.addPerson(p);
+				if (prawd > pm)
+				{
+					Person p = mutation(actual_pop, p1);
+					pop.addPerson(p);
+				}
+				else
+				{
+					pop.addPerson(p1);
+				}
+				prawd = (double)rand() / (double)RAND_MAX;
+				if (prawd > pm)
+				{
+					Person p = mutation(actual_pop, p2);
+					pop.addPerson(p);
+				}
+				else
+				{
+					pop.addPerson(p2);
+				}
+			}
 		}
-		result = pop.computeGrade(flows, distance);
+		pop.computeGrade(flows, distance);
+		plik << n << "\t";
+		plik << pop.minGrade() << "\t";
+		plik << pop.maxGrade() << "\t";
+		plik << pop.averageGrade();
+		plik << endl;
+
+
 		actual_pop = pop;
 		pop.clear();
 	}    
+	plik.close();
 	return result;
 
 }
@@ -93,9 +145,9 @@ Population Evolution::createRandomPopulation()
 	return *p;
 }
 
-int Evolution::computeGrade(Population pop)
+void Evolution::computeGrade(Population pop)
 {
-	return pop.computeGrade(flows, distance);
+	pop.computeGrade(flows, distance);
 }
 
 Person Evolution::selection(Population pop)

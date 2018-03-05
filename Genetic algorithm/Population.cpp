@@ -24,18 +24,12 @@ Population::~Population()
 //	// TODO: tu wstawiæ instrukcjê return
 //}
 
-int Population::computeGrade(int** flows, int** distance)
+void Population::computeGrade(int** flows, int** distance)
 {
-	int min = people[0].evaluating_result(flows, distance);
-	for (int i = 1; i < pop_size; i++)
+	for (int i = 0; i < pop_size; i++)
 	{
-		int tmp = people[i].evaluating_result(flows, distance);
-		if (tmp < min)
-		{
-			min = tmp;
-		}
+		people[i].evaluating_result(flows, distance);
 	}
-	return min;
 }
 
 Person  Population::tournament(int tour)
@@ -120,4 +114,40 @@ void Population::clear()
 {
 	actual_size = 0;
 	people.clear();
+}
+
+int Population::maxGrade()
+{
+	int max = 0;
+	for (int i = 0; i < actual_size; i++)
+	{
+		if (max < people[i].getGrade())
+		{
+			max = people[i].getGrade();
+		}
+	}
+	return max;
+}
+
+int Population::minGrade()
+{
+	int min = people[0].getGrade();
+	for (int i = 0; i < actual_size; i++)
+	{
+		if (min > people[i].getGrade())
+		{
+			min = people[i].getGrade();
+		}
+	}
+	return min;
+}
+
+double Population::averageGrade()
+{
+	double avr = 0;
+	for (int i = 0; i < actual_size; i++)
+	{
+		avr += (double)people[i].getGrade() / (double)actual_size;
+	}
+	return avr;
 }

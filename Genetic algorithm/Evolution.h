@@ -1,5 +1,6 @@
 #pragma once
 #include "Population.h"
+#include <fstream>
 class Evolution
 {
 public:
@@ -8,7 +9,7 @@ public:
 	~Evolution();
 	int run();
 	Population createRandomPopulation();
-	int computeGrade(Population pop);
+	void computeGrade(Population pop);
 	Person selection(Population pop);
 	Person crossover(Population pop, Person per1, Person per2);
 	Person mutation(Population pop, Person per);

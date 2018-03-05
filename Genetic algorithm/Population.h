@@ -9,7 +9,7 @@ public:
 	Population(int p_size, int num);	
 	~Population();
 	//Population& operator=(Population &pcOther);
-	int computeGrade(int** flows, int** distance);
+	void computeGrade(int** flows, int** distance);
 	Person tournament(int tour);
 	Person crossover(Person pcOther1, Person pcOther2);
 	Person mutation(Person pcOther);
@@ -23,6 +23,10 @@ public:
 	string toString();
 
 	void clear();
+
+	int maxGrade();
+	int minGrade();
+	double averageGrade();
 
 private:
 	vector<Person> people;
