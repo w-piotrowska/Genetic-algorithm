@@ -60,6 +60,12 @@ Person Population::mutation(Person pcOther)
 	return pcOther;
 }
 
+Person Population::mutationPerGen(Person pcOther, double pm)
+{
+	pcOther.mutation(pm);
+	return pcOther;
+}
+
 Person* Population::randomPerson()
 {
 	return &(people[rand() % pop_size]);
@@ -149,5 +155,5 @@ double Population::averageGrade()
 	{
 		avr += (double)people[i].getGrade() / (double)actual_size;
 	}
-	return avr;
+	return (int)avr;
 }

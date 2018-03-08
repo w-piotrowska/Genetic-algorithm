@@ -13,6 +13,7 @@ public:
 	Person tournament(int tour);
 	Person crossover(Person pcOther1, Person pcOther2);
 	Person mutation(Person pcOther);
+	Person mutationPerGen(Person pcOther, double pm);
 	Person* randomPerson();
 	void addPerson(Person & per);
 	void addRandomPerson();

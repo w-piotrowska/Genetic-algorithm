@@ -5,14 +5,16 @@ class Evolution
 {
 public:
 	Evolution();
-	Evolution(double prm, double prx, int p_size, int generations, int t, int n_of_gens, int ** fl, int ** dis);
+	Evolution(double prm, double prx, int p_size, int generations, int t, string f_name);
 	~Evolution();
-	int run();
+	void run();
 	Population createRandomPopulation();
 	void computeGrade(Population pop);
 	Person selection(Population pop);
 	Person crossover(Population pop, Person per1, Person per2);
 	Person mutation(Population pop, Person per);
+
+	void saveToFile(Population pop, ofstream plik);
 
 private:
 	Population * populations;

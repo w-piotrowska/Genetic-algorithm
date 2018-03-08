@@ -97,6 +97,22 @@ void Person::swap()
 	genes[ran2] = tmp;
 }
 
+void Person::mutation(double pm)
+{
+	
+	for (int i = 0; i < n; i++)
+	{
+		double prawd = (double)rand() / (double)RAND_MAX;
+		if (pm > prawd)
+		{
+			int tmp = genes[i];
+			int ran2 = rand() % n;
+			genes[i] = genes[ran2];
+			genes[ran2] = tmp;
+		}
+	}
+}
+
 void Person::fix()
 {
 	int* tab = new int[n];

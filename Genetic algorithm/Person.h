@@ -17,6 +17,7 @@ public:
 	string toString();
 	int evaluating_result(int** flows, int** distance);
 	void swap();
+	void mutation(double pm);
 	void fix();
 	Person& crossover(Person &pcOther);
 	int* getGenes();
