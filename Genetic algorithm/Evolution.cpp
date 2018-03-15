@@ -60,91 +60,105 @@ Evolution::~Evolution()
 	delete distance;
 }
 
-void Evolution::run()
+void Evolution::run(string name)
 {
-	Population actual_pop(pop_size, n);
-	actual_pop.randomPopulation();
-	actual_pop.computeGrade(flows, distance);
+	string minp = to_string(n) + "_" + name + "_min.csv";
+	string maxp = to_string(n) + "_" + name + "_max.csv";
+	string avgp = to_string(n) + "_" + name + "_avg.csv";
+	ofstream plikmin;
+	ofstream plikmax;
+	ofstream plikavg;
+	plikmin.open(minp);
+	plikmax.open(maxp);
+	plikavg.open(avgp);
 
-	ofstream plik;
-	plik.open("ga.txt");
-	//saveToFile(actual_pop, plik);
-	plik << n << "\t";
-	plik << actual_pop.minGrade() << "\t";
-	plik << actual_pop.maxGrade() << "\t";
-	plik << actual_pop.averageGrade();
-	plik << endl;
-
-	Population pop(pop_size, n);
-	for (int i = 1; i < gen; i++)
+	for (int k = 0; k < 20; k++)
 	{
-		for (int j = 0; j < pop_size / 2; j++)
+		Population actual_pop(pop_size, n);
+		actual_pop.randomPopulation();
+		actual_pop.computeGrade(flows, distance);
+
+
+		//saveToFile(actual_pop, plik);
+		//plik << n << "\t";
+		plikmin << actual_pop.minGrade() << ";";
+		plikmax << actual_pop.maxGrade() << ";";
+		plikavg << actual_pop.averageGrade() <<";";
+
+		Population pop(pop_size, n);
+		for (int i = 1; i < gen; i++)
 		{
-			Person p1 = selection(actual_pop);
-			Person p2 = selection(actual_pop);
-			double prawd = (double)rand() / (double)RAND_MAX;
-			if (prawd < px)
+			for (int j = 0; j < pop_size / 2; j++)
 			{
-				Person p3 = crossover(actual_pop, p1, p2);
-				Person p4 = crossover(actual_pop, p2, p1);
-				prawd = (double)rand() / (double)RAND_MAX;
-				if (prawd < pm)
+				Person p1 = selection(actual_pop);
+				Person p2 = selection(actual_pop);
+				double prawd = (double)rand() / (double)RAND_MAX;
+				if (prawd < px)
 				{
-					Person p = mutation(actual_pop, p3);
-					pop.addPerson(p);
+					Person p3 = crossover(actual_pop, p1, p2);
+					Person p4 = crossover(actual_pop, p2, p1);
+					prawd = (double)rand() / (double)RAND_MAX;
+					if (prawd < pm)
+					{
+						Person p = mutation(actual_pop, p3);
+						pop.addPerson(p);
+					}
+					else
+					{
+						pop.addPerson(p3);
+					}
+					prawd = (double)rand() / (double)RAND_MAX;
+					if (prawd < pm)
+					{
+						Person p = mutation(actual_pop, p4);
+						pop.addPerson(p);
+					}
+					else
+					{
+						pop.addPerson(p4);
+					}
 				}
 				else
 				{
-					pop.addPerson(p3);
-				}
-				prawd = (double)rand() / (double)RAND_MAX;
-				if (prawd < pm)
-				{
-					Person p = mutation(actual_pop, p4);
-					pop.addPerson(p);
-				}
-				else
-				{
-					pop.addPerson(p4);
+					prawd = (double)rand() / (double)RAND_MAX;
+					if (prawd < pm)
+					{
+						Person p = mutation(actual_pop, p1);
+						pop.addPerson(p);
+					}
+					else
+					{
+						pop.addPerson(p1);
+					}
+					prawd = (double)rand() / (double)RAND_MAX;
+					if (prawd < pm)
+					{
+						Person p = mutation(actual_pop, p2);
+						pop.addPerson(p);
+					}
+					else
+					{
+						pop.addPerson(p2);
+					}
 				}
 			}
-			else
-			{
-				prawd = (double)rand() / (double)RAND_MAX;
-				if (prawd < pm)
-				{
-					Person p = mutation(actual_pop, p1);
-					pop.addPerson(p);
-				}
-				else
-				{
-					pop.addPerson(p1);
-				}
-				prawd = (double)rand() / (double)RAND_MAX;
-				if (prawd < pm)
-				{
-					Person p = mutation(actual_pop, p2);
-					pop.addPerson(p);
-				}
-				else
-				{
-					pop.addPerson(p2);
-				}
-			}
+			pop.computeGrade(flows, distance);
+			//plik << n << "\t";
+			plikmin << pop.minGrade() << ";";
+			plikmax << pop.maxGrade() << ";";
+			plikavg << pop.averageGrade() << ";";
+			//plik << endl;
+
+			actual_pop = pop;
+			pop.clear();
 		}
-		pop.computeGrade(flows, distance);
-		plik << n << "\t";
-		plik << pop.minGrade() << "\t";
-		plik << pop.maxGrade() << "\t";
-		plik << pop.averageGrade();
-		plik << endl;
-		//saveToFile(pop, plik);
-
-
-		actual_pop = pop;
-		pop.clear();
-	}    
-	//plik.close();
+		plikmin << endl;
+		plikmax << endl;
+		plikavg << endl;
+	}
+	plikmin.close();
+	plikmax.close();
+	plikavg.close();
 
 }
 

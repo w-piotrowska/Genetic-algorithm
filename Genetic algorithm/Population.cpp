@@ -19,11 +19,6 @@ Population::~Population()
 	//delete people;
 }
 
-//Population & Population::operator=(Population & pcOther)
-//{
-//	// TODO: tu wstawiæ instrukcjê return
-//}
-
 void Population::computeGrade(int** flows, int** distance)
 {
 	for (int i = 0; i < pop_size; i++)
@@ -45,8 +40,7 @@ Person  Population::tournament(int tour)
 			the_best = i;
 		}
 	}
-	Person p = zaw[the_best];
-	return p;
+	return zaw[the_best];
 }
 
 Person Population::crossover(Person pcOther1, Person pcOther2)

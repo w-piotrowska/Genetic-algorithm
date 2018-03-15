@@ -7,7 +7,7 @@ public:
 	Evolution();
 	Evolution(double prm, double prx, int p_size, int generations, int t, string f_name);
 	~Evolution();
-	void run();
+	void run(string name);
 	Population createRandomPopulation();
 	void computeGrade(Population pop);
 	Person selection(Population pop);
